@@ -39,7 +39,23 @@ function decreaseHorizontalLevel(prevPosition) {
 
 const cardSource = {
   isDragging(props, monitor) {
-    return props.id === monitor.getItem().id;
+    let draggedItem = monitor.getItem();
+
+
+    let ids = [];
+    const flattenId = (item) => {
+      ids.push(item.id)
+      if (item.children && item.children.length) {
+        item.children.forEach(child => flattenId(child));
+      }
+    }
+
+    flattenId(draggedItem.data)
+
+    if (ids.indexOf(props.id) > -1){
+      return true
+    }
+
   },
   beginDrag(props, monitor, component) {
     const node = findDOMNode(component);
